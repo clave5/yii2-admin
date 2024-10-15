@@ -5,6 +5,7 @@ namespace mdm\admin\controllers;
 use Yii;
 use mdm\admin\models\Menu;
 use mdm\admin\models\searchs\Menu as MenuSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -19,6 +20,8 @@ use mdm\admin\components\Helper;
 class MenuController extends Controller
 {
 
+
+
     /**
      * @inheritdoc
      */
@@ -29,6 +32,15 @@ class MenuController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],  // Seuls les super-admins ont accès
+                    ],
                 ],
             ],
         ];

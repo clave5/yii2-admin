@@ -4,6 +4,7 @@ namespace mdm\admin\controllers;
 
 use Yii;
 use mdm\admin\models\Route;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 
@@ -15,6 +16,8 @@ use yii\filters\VerbFilter;
  */
 class RouteController extends Controller
 {
+
+
     public function behaviors()
     {
         return [
@@ -25,6 +28,15 @@ class RouteController extends Controller
                     'assign' => ['post'],
                     'remove' => ['post'],
                     'refresh' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],  // Seuls les super-admins ont accès
+                    ],
                 ],
             ],
         ];
@@ -48,7 +60,7 @@ class RouteController extends Controller
     {
         Yii::$app->getResponse()->format = 'json';
         $routes = Yii::$app->getRequest()->post('route', '');
-        $routes = preg_split('/\s*,\s*/', trim((string)$routes), -1, PREG_SPLIT_NO_EMPTY);
+        $routes = preg_split('/\s*,\s*/', trim($routes), -1, PREG_SPLIT_NO_EMPTY);
         $model = new Route();
         $model->addNew($routes);
         return $model->getRoutes();

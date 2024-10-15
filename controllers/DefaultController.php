@@ -3,6 +3,7 @@
 namespace mdm\admin\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 
 /**
  * DefaultController
@@ -13,6 +14,20 @@ use Yii;
 class DefaultController extends \yii\web\Controller
 {
 
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],  // Seuls les super-admins ont accès
+                    ],
+                ],
+            ],
+        ];
+    }
     /**
      * Action index
      */

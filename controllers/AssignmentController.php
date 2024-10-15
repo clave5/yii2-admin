@@ -5,6 +5,7 @@ namespace mdm\admin\controllers;
 use Yii;
 use mdm\admin\models\Assignment;
 use mdm\admin\models\searchs\Assignment as AssignmentSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -17,6 +18,7 @@ use yii\filters\VerbFilter;
  */
 class AssignmentController extends Controller
 {
+
     public $userClassName;
     public $idField = 'id';
     public $usernameField = 'username';
@@ -47,6 +49,15 @@ class AssignmentController extends Controller
                 'actions' => [
                     'assign' => ['post'],
                     'revoke' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],  // Seuls les super-admins ont accès
+                    ],
                 ],
             ],
         ];

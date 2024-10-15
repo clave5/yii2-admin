@@ -13,6 +13,7 @@ use mdm\admin\models\User;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\base\UserException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\mail\BaseMailer;
 use yii\web\BadRequestHttpException;
@@ -24,6 +25,7 @@ use yii\web\NotFoundHttpException;
  */
 class UserController extends Controller
 {
+
     private $_oldMailPath;
 
     /**
@@ -38,6 +40,15 @@ class UserController extends Controller
                     'delete' => ['post'],
                     'logout' => ['post'],
                     'activate' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],  // Seuls les super-admins ont accès
+                    ],
                 ],
             ],
         ];

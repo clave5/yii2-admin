@@ -3,6 +3,7 @@
 namespace mdm\admin\controllers;
 
 use mdm\admin\components\ItemController;
+use yii\filters\AccessControl;
 use yii\rbac\Item;
 
 /**
@@ -13,6 +14,21 @@ use yii\rbac\Item;
  */
 class PermissionController extends ItemController
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],  // Seuls les super-admins ont accès
+                    ],
+                ],
+            ],
+        ];
+    }
 
     /**
      * @inheritdoc
